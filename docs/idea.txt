@@ -55,3 +55,93 @@ CRUD de tareas con comprobación de propiedad.
 Manejador de errores centralizado.
 Tests.
 README y memoria.
+
+
+
+
+
+------------------LISTADO DE TAREAS--------------------
+
+# Plan de trabajo: To-Do API paso a paso
+
+Nada de código por mi parte: cada tarea te dice **qué** hacer y **qué debes comprobar** para saber que está bien. Cuando termines una, me cuentas y la revisamos juntos.
+
+## Fase 0: Preparación
+
+1. **Crea el repositorio en GitHub** y clónalo en tu ordenador.
+2. **Inicia el proyecto con npm** (`npm init`) y comprueba que existe `package.json`.
+3. **Instala las dependencias**: `express`, `mongoose`, `bcrypt`, `jsonwebtoken`, `dotenv`. Y como dependencia de desarrollo: `jest` (y opcionalmente `nodemon`).
+4. **Crea el `.gitignore`** con `node_modules` y `.env` dentro. Esto es importante: nunca subas tu `.env`.
+5. **Crea la estructura de carpetas** vacía (`config`, `models`, `controllers`, `services`, `routes`, `middlewares`, `utils`, `tests`).
+6. **Crea el `.env` y el `.env.example`**: puerto, URI de MongoDB, secreto del JWT y duración del token. El `.env.example` lleva las mismas variables pero sin valores reales.
+
+✅ *Comprobación: tienes el repo, la estructura y ningún secreto subido a GitHub.*
+
+## Fase 1: Servidor y base de datos
+
+7. **Crea `app.js`**: una app Express que lea JSON del body y tenga una ruta de prueba (por ejemplo `/health`).
+8. **Crea `server.js`**: arranca la app en el puerto del `.env`.
+9. **Crea `config/db.js`**: función que conecta con MongoDB usando Mongoose.
+10. **Une todo**: `server.js` conecta a la BD y luego levanta el servidor.
+
+✅ *Comprobación: arrancas el proyecto, ves en consola que conecta a Mongo y `/health` responde.*
+
+## Fase 2: Modelos
+
+11. **Modelo `User`**: nombre, email (único), password y rol (`user`/`admin`, por defecto `user`), con sus validaciones.
+12. **Modelo `Task`**: título, estado, fecha límite, `owner` (referencia a `User`) y la `checklist` como subdocumentos embebidos.
+
+✅ *Comprobación: los esquemas tienen `required`, `enum`, `minlength`, etc.*
+
+## Fase 3: Registro y login
+
+13. **Registro**: ruta, controlador y lógica para crear usuario con la contraseña cifrada con bcrypt.
+14. **Login**: comprueba email y contraseña, y devuelve un JWT.
+15. **Logout**: ruta que responde 200 (el cliente descarta el token).
+16. **Prueba todo con Postman, Insomnia o Thunder Client** (herramienta para hacer peticiones a tu API).
+
+✅ *Comprobación: en Mongo la contraseña aparece cifrada, nunca en texto plano, y el login te da un token.*
+
+## Fase 4: Middlewares de seguridad
+
+17. **Middleware `auth`**: lee el token de la cabecera, lo verifica y pone el usuario en `req.user`. Si falla, 401.
+18. **Middleware `authorize`**: recibe un rol y deja pasar solo a quien lo tenga. Si no, 403.
+
+✅ *Comprobación: una ruta protegida responde 401 sin token y 403 con un usuario sin permisos.*
+
+## Fase 5: Endpoints de tareas
+
+19. **Crear tarea** (POST): el `owner` sale del token, no del body.
+20. **Listar tareas** (GET): el usuario ve las suyas, el admin ve todas.
+21. **Editar tarea** (PUT): solo el dueño o el admin.
+22. **Borrar tarea** (DELETE): solo el dueño o el admin.
+23. **Ruta solo admin** (GET `/users`) usando tu middleware `authorize`.
+
+✅ *Comprobación: con dos usuarios distintos, uno no puede tocar las tareas del otro (403), y el admin sí.*
+
+## Fase 6: Errores y códigos HTTP
+
+24. **Manejador de errores centralizado**: un middleware con 4 parámetros, al final de `app.js`.
+25. **Revisa los códigos** en todas las rutas: 200, 201, 400, 401, 403, 404.
+26. **Ruta no encontrada**: devuelve 404 para rutas que no existen.
+
+✅ *Comprobación: ningún error te tumba el servidor ni devuelve el stack al cliente.*
+
+## Fase 7: Tests
+
+27. **Configura Jest** y el script `npm test`.
+28. **Tests de `authorize`**: con `req`, `res` y `next` simulados (admin pasa, user recibe 403).
+29. **Función de lógica propia** (por ejemplo `canModifyTask`) en `utils`.
+30. **Tests de esa función**: dueño, admin y otro usuario.
+
+✅ *Comprobación: mínimo 4 tests pasando y sin tocar la base de datos.*
+
+## Fase 8: Documentación
+
+31. **README**: instalación, variables de entorno, cómo arrancar y cómo testear.
+32. **Memoria**: ve rellenando los 9 apartados que piden. Consejo: ve anotando los retos que te vayan surgiendo *mientras* programas, luego se te olvidan.
+33. **Revisión final**: repo limpio, sin secretos, `.env.example` actualizado.
+
+## Cómo seguimos
+
+Empieza por la **Fase 0** y avísame cuando termines o si te atascas en algo. Si quieres, dime también qué sabes ya de Node/Express para ajustar el nivel de mis explicaciones.

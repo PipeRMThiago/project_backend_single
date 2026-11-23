@@ -4,8 +4,11 @@
   "description": "Proyecto académico individual de Backend",
   "main": "index.js",
   "scripts": {
+    "main": "node src/index.js",
+    "dev": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+    "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PipeRMThiago/project_backend_single.git"
@@ -16,5 +19,14 @@
   "bugs": {
     "url": "https://github.com/PipeRMThiago/project_backend_single/issues"
   },
-  "homepage": "https://github.com/PipeRMThiago/project_backend_single#readme"
+  "homepage": "https://github.com/PipeRMThiago/project_backend_single#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
 }
