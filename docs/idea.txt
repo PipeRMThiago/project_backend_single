@@ -1,0 +1,57 @@
+Entidades
+User: name, email (único), password (hash con bcrypt), role (user | admin, por defecto user).
+Task (colección, con owner referenciando a User): title (required, min 3), status (pendiente | en_curso | hecha), dueDate, owner (ObjectId).
+checklist (subdocumentos embebidos en Task): text, done. Lo embebes porque los puntos de la checklist no se consultan por separado, y eso te da un buen argumento para la memoria.
+
+Con eso tienes 2 colecciones más 1 entidad embebida, que es lo que piden.
+
+Endpoints
+Método	Ruta	Quién	Qué hace
+POST	/api/auth/register	público	Crea usuario (201)
+POST	/api/auth/login	público	Devuelve JWT (200)
+POST	/api/auth/logout	autenticado	Cierra sesión (200)
+GET	/api/tasks	user	Lista sus tareas (admin: todas)
+POST	/api/tasks	user	Crea una tarea (201)
+PUT	/api/tasks/:id	dueño o admin	Edita la tarea (200/403/404)
+DELETE	/api/tasks/:id	dueño o admin	Borra la tarea (200/403/404)
+GET	/api/users	solo admin	Lista usuarios (403 si no es admin)
+
+Los 3 endpoints "extra" que exigen son POST, PUT y DELETE de tareas. El GET /users te da la ruta restringida a admin.
+
+Sobre el logout
+
+Con JWT el servidor no guarda sesión, así que hay dos opciones:
+
+Simple: POST /logout responde 200 y el cliente borra el token. Es válido, pero el token sigue siendo técnicamente válido hasta que caduque. Documéntalo en la memoria y usa tokens de vida corta (por ejemplo 1h).
+Con blacklist: guardas el token en una colección RevokedToken y el middleware de auth la comprueba. Es más seguro, pero añade una colección y complejidad.
+
+Para tu caso, la opción 1 con una nota en "Mejoras futuras" (blacklist) queda bien.
+
+Estructura de carpetas
+src/
+├── config/        (db.js)
+├── models/        (User.js, Task.js)
+├── controllers/   (authController.js, taskController.js, userController.js)
+├── services/      (taskService.js)
+├── routes/        (authRoutes.js, taskRoutes.js, userRoutes.js)
+├── middlewares/   (auth.js, authorize.js, errorHandler.js)
+├── utils/         (validators.js)
+├── app.js
+└── server.js
+tests/
+.env.example
+README.md
+Tests unitarios (sin BD)
+authorize('admin') llama a next() si req.user.role es admin.
+authorize('admin') responde 403 si el rol es user.
+Una función canModifyTask(user, task) que devuelve true para el dueño.
+La misma función devuelve true para admin y false para otro usuario.
+Opcional: una función de validación de transición de estado (pendiente → en_curso → hecha, no al revés).
+Orden de trabajo
+Modelos y conexión a Mongo.
+Register y login con bcrypt y JWT.
+Middlewares auth y authorize.
+CRUD de tareas con comprobación de propiedad.
+Manejador de errores centralizado.
+Tests.
+README y memoria.

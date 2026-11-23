@@ -1,0 +1,20 @@
+{
+  "name": "project_backend_single",
+  "version": "1.0.0",
+  "description": "Proyecto académico individual de Backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PipeRMThiago/project_backend_single.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PipeRMThiago/project_backend_single/issues"
+  },
+  "homepage": "https://github.com/PipeRMThiago/project_backend_single#readme"
+}
