@@ -35,7 +35,7 @@ const getEnv = () => {
 
   return {
     NODE_ENV: process.env.NODE_ENV || "development",
-    APP_PORT: Number(process.env.APP_PORT) || 3000,
+    APP_PORT: Number(process.env.APP_PORT) || 3001,
     FRONTEND_URL: process.env.FRONTEND_URL || "http://localhost:5173",
     JWT_SECRET: process.env.JWT_SECRET,
     MONGO_HOST: process.env.MONGO_HOST,

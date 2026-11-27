@@ -1,5 +1,6 @@
 import { Router } from "express";
 import authRouter from "./auth.routes.js";
+import taskRouter from "./task.routes.js";
 
 
 const apiRouter = Router();
@@ -9,6 +10,7 @@ apiRouter.get("/ping", (req, res) => {
 });
 
 apiRouter.use("/auth", authRouter);
+apiRouter.use("/task", taskRouter);
 
 
 export default apiRouter;
