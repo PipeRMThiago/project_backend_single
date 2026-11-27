@@ -51,6 +51,6 @@ app.use("/api", router);
 await connectDB();
 
 // Dentro del contenedor la API escucha en el 3000; APP_PORT es el puerto publicado en tu ordenador
-app.listen(3000, () => {
+app.listen(3001, () => {
   console.log(`app en marcha: http://localhost:${env.APP_PORT}/api · documentación: http://localhost:${env.APP_PORT}/docs`);
 });
